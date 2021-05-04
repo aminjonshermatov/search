@@ -1,4 +1,4 @@
-foo bar baz
 bar baz foo
+foo bar baz
 baz foo baz
 foo bar baz

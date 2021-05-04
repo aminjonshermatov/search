@@ -16,9 +16,11 @@ func main() {
 	files = append(files, "cmd/data/info2.txt")
 	files = append(files, "cmd/data/info3.txt")
 
-	for i := 0; i < len(files); i++ {
-		res := <- search.All(ctx, phrase, files)
-		log.Printf("res %#v", res)
+	ch := search.All(ctx, phrase, files)
+
+	for k := range ch {
+		log.Printf("result %#v", k)
 	}
+	log.Print("done")
 	cancel()
 }

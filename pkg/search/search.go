@@ -19,8 +19,11 @@ type Result struct {
 func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 	ch := make(chan []Result)
 
+	log.Print(len(files))
 	for _, file := range files {
+		log.Print("file")
 		go func(ctx context.Context, file string, phrase string, ch chan<- []Result) {
+			log.Print("go routine")
 			select {
 			case <-ctx.Done():
 				close(ch)
@@ -76,6 +79,7 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 				}
 
 				if len(resultArr) > 0 {
+					log.Print("send")
 					ch <- resultArr
 				}
 			}
