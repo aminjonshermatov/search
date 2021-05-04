@@ -26,8 +26,11 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 			log.Print("go routine")
 			select {
 			case <-ctx.Done():
+				log.Print("done")
 				close(ch)
-			default:
+			default: {
+				log.Print("default")
+			}
 			}
 			_, err := os.Stat(file)
 			if !os.IsNotExist(err) {
@@ -36,13 +39,6 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 					log.Print(err)
 					return
 				}
-				defer func() {
-					if cerr := src.Close(); cerr != nil {
-						if err == nil {
-							err = cerr
-						}
-					}
-				}()
 
 				reader := bufio.NewReader(src)
 				lineNum := 1
@@ -82,6 +78,8 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 					log.Print("send")
 					ch <- resultArr
 				}
+			} else {
+				close(ch)
 			}
 		}(ctx, file, phrase, ch)
 	}
